@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { get } from './mockBackend/fetch';
 
 export default function Forecast() {
@@ -10,21 +10,19 @@ export default function Forecast() {
     alert('Requested data from server...');
     get(forecastType).then((response) => {
       alert('Response: ' + JSON.stringify(response,'',2));
-//saves ghe data in form of array and not just displays it
       setData(response.data);
     });
   }, [forecastType]);
-// empty string would render just once, but here we set dependencies based on button and change of the forecast type
 
-  const handleChange = (index) => ({ target }) =>
+  const handleChange = (itemId) => ({ target }) =>
     setNotes((prev) => ({
       ...prev,
-      [index]: target.value
+      [itemId]: target.value
     }));
 
-    if(!data) {
-      return <p>Loading...</p>
-    }
+  if (!data) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className='App'>
@@ -43,19 +41,21 @@ export default function Forecast() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, i) => (
-            <tr key={item.id}>
-              <td>{item.summary}</td>
-              <td> {item.temp.avg}°F</td>
-              <td>{item.precip}%</td>
-              <td>
-                <input
-                  value={notes[item.id] || ''}
-                  onChange={handleChange(item.id)}
-                />
-              </td>
-            </tr>
-          ))}
+          {data.map((item) => {
+            return (
+              <tr key={item.id}>
+                <td>{item.summary}</td>
+                <td> {item.temp.avg}°F</td>
+                <td>{item.precip}%</td>
+                <td>
+                  <input
+                    value={notes[item.id] || ''}
+                    onChange={handleChange(item.id)}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
